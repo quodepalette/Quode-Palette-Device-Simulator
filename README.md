@@ -72,11 +72,6 @@ Keyboard shortcuts inside the simulator: `R` rotates the devices, `F` toggles fu
     └── devices.js
 ```
 
-## Contributing
-
-Issues and pull requests are welcome. There is no build step, so edit the files, reload the extension at `chrome://extensions` and test in the browser.
-
-To add a device, add a line to `simulator/devices.js`. To change how a frame looks, see the `metrics` function in `simulator/simulator.js` and the frame styles in `simulator/simulator.css`.
 
 ## License
 
