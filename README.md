@@ -4,6 +4,10 @@ A Chrome extension for previewing a website on phones, tablets, laptops and more
 
 Open it on any site, and you get a MacBook Air, an iPad Pro 11 and an iPhone 17 Pro Max showing the same page. Scroll, click or type in one device and the others follow.
 
+<p align="center">
+  <img src="docs/video.gif" alt="Quode Palette Capture Demo" width="100%">
+</p>
+
 ## Install
 
 The extension is not on the Chrome Web Store yet, so you load it as an unpacked extension.
