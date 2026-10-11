@@ -80,4 +80,4 @@ To add a device, add a line to `simulator/devices.js`. To change how a frame loo
 
 ## License
 
-Released under the [MIT License](LICENSE).
+Released under the [PolyForm Noncommercial License 1.0.0](LICENSE). You are free to use, modify and share it for personal, educational and other noncommercial purposes. For commercial use, please get in touch.
