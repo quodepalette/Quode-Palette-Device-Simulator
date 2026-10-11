@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Quode Palette Device Simulator</title>
+  <link rel="icon" href="../icons/icon32.png">
+  <link rel="stylesheet" href="simulator.css">
+</head>
+<body>
+  <div class="app" id="app">
+    <header class="bar">
+      <div class="brand">
+        <img src="../icons/icon48.png" alt="" width="28" height="28">
+        <div><b>Quode Palette</b><small>Device Simulator</small></div>
+      </div>
+
+      <form class="url" id="urlForm" autocomplete="off">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>
+        <input id="url" type="text" spellcheck="false" placeholder="Enter a URL, e.g. example.com" aria-label="URL">
+        <button class="go" type="submit">Go</button>
+      </form>
+
+      <div class="tools">
+        <button class="pill" id="btnDevices" aria-haspopup="dialog" aria-expanded="false">
+          <svg viewBox="0 0 24 24"><rect x="7" y="2" width="10" height="20" rx="2.5"/><path d="M11 19h2"/></svg>
+          <span id="devLabel">Devices</span>
+        </button>
+        <button class="ib" id="btnReload" title="Reload" aria-label="Reload">
+          <svg viewBox="0 0 24 24"><path d="M20 11a8 8 0 1 0-2.3 5.7M20 4v7h-7"/></svg>
+        </button>
+        <button class="ib" id="btnRotate" title="Rotate (R)" aria-label="Rotate">
+          <svg viewBox="0 0 24 24"><rect x="7" y="2" width="10" height="16" rx="2" transform="rotate(30 12 10)"/><path d="M3 18c2 3 6 4 9 3"/></svg>
+        </button>
+        <select id="zoom" title="Zoom" aria-label="Zoom">
+          <option value="fit">Fit</option>
+          <option value="25">25%</option>
+          <option value="50">50%</option>
+          <option value="75">75%</option>
+          <option value="100">100%</option>
+          <option value="125">125%</option>
+        </select>
+        <span class="sep"></span>
+        <button class="ib tog" id="tgFrame" data-tog="frame" title="Device frame" aria-label="Device frame" aria-pressed="true">
+          <svg viewBox="0 0 24 24"><rect x="6" y="2" width="12" height="20" rx="3"/><rect x="8.5" y="5" width="7" height="14" rx="1"/></svg>
+        </button>
+        <button class="ib tog" id="tgTouch" data-tog="touch" title="Touch emulation" aria-label="Touch emulation" aria-pressed="true">
+          <svg viewBox="0 0 24 24"><path d="M9 11V5a2 2 0 0 1 4 0v5l5 1.2a2 2 0 0 1 1.5 2.2L19 18a3 3 0 0 1-3 3h-4a3 3 0 0 1-2.4-1.2L5 15a1.6 1.6 0 0 1 2.4-2L9 14.5"/></svg>
+        </button>
+        <button class="ib tog" id="tgSync" data-tog="sync" title="Synchronized scrolling, clicks and typing" aria-label="Synchronized scrolling, clicks and typing" aria-pressed="true">
+          <svg viewBox="0 0 24 24"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3A4 4 0 0 0 11 18.7l1-1"/></svg>
+        </button>
+        <span class="sep"></span>
+        <button class="ib" id="btnFs" title="Fullscreen (F)" aria-label="Fullscreen">
+          <svg viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>
+        </button>
+        <button class="ib" id="btnSettings" title="Settings" aria-label="Settings" aria-haspopup="dialog" aria-expanded="false">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <main class="stage" id="stage">
+      <div class="slots" id="slots"></div>
+      <div class="empty" id="empty">
+        <img src="../icons/icon128.png" alt="" width="72" height="72">
+        <h1>See your site through your users' eyes</h1>
+        <p>Enter a URL above to preview it on phones, tablets, watches and desktops.</p>
+      </div>
+      <button class="fs-x" id="fsExit" aria-label="Exit fullscreen" title="Exit fullscreen (Esc)">
+        <svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg>
+      </button>
+    </main>
+
+    <!-- Device picker -->
+    <section class="panel picker" id="picker" role="dialog" aria-label="Devices" hidden>
+      <div class="p-head">
+        <div class="p-title">Visible devices in the tab</div>
+        <div class="p-slots" id="pSlots"></div>
+      </div>
+      <div class="p-search">
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input id="search" type="search" placeholder="Search devices" aria-label="Search devices">
+      </div>
+      <div class="p-body" id="pBody"></div>
+      <div class="p-foot">The device you're looking for isn't in the list? Add it as a <a href="#" id="lnkCustom">custom device</a>.</div>
+    </section>
+
+    <!-- Settings -->
+    <aside class="panel drawer" id="settings" role="dialog" aria-label="Settings" hidden>
+      <div class="d-head"><h2>Settings</h2><button class="ib" id="setClose" aria-label="Close settings"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+      <div class="d-body">
+        <section>
+          <h3>Appearance</h3>
+          <label class="row"><span>Interface theme</span>
+            <select data-set="theme"><option value="dark">Dark</option><option value="light">Light</option><option value="system">System</option></select></label>
+          <label class="row"><span>Stage background</span>
+            <select data-set="bg"><option value="auto">Match theme</option><option value="white">White</option><option value="black">Black</option><option value="custom">Custom colour…</option></select></label>
+          <label class="row" id="rowBgColor"><span>Custom colour</span><input type="color" data-set="bgColor"></label>
+          <label class="row"><span>Show background dots</span><span class="sw"><input type="checkbox" data-set="dots"><i></i></span></label>
+        </section>
+        <section>
+          <h3>Devices</h3>
+          <label class="row"><span>Realistic device frames</span><span class="sw"><input type="checkbox" data-set="frame"><i></i></span></label>
+          <label class="row"><span>Frame colour</span>
+            <select data-set="frameColor"><option value="auto">Automatic</option><option value="spacegray">Space gray</option><option value="forest">Forest green</option><option value="black">Graphite</option><option value="titanium">Titanium</option><option value="silver">Silver</option><option value="gold">Gold</option><option value="purple">Deep purple</option><option value="blue">Blue</option></select></label>
+          <label class="row"><span>Show device names</span><span class="sw"><input type="checkbox" data-set="labels"><i></i></span></label>
+        </section>
+        <section>
+          <h3>Interaction</h3>
+          <label class="row"><span>Touch emulation</span><span class="sw"><input type="checkbox" data-set="touch"><i></i></span></label>
+          <label class="row"><span>Show scrollbars</span><span class="sw"><input type="checkbox" data-set="showScrollbars"><i></i></span></label>
+        </section>
+        <section>
+          <h3>Scrolling</h3>
+          <label class="row"><span>Synchronize scrolling, clicks & typing</span><span class="sw"><input type="checkbox" data-set="sync"><i></i></span></label>
+          <label class="row"><span>Sync mode</span>
+            <select data-set="syncMode"><option value="ratio">Proportional (same page position)</option><option value="px">Pixel-exact</option></select></label>
+        </section>
+        <button class="btn" id="setReset">Reset all settings</button>
+      </div>
+    </aside>
+  </div>
+
+  <dialog id="dlg">
+    <form id="dlgForm" method="dialog">
+      <h2>Custom device</h2>
+      <label>Name<input id="cName" required maxlength="40" placeholder="My device"></label>
+      <div class="r3">
+        <label>Width (px)<input id="cW" type="number" min="100" max="4000" required value="390"></label>
+        <label>Height (px)<input id="cH" type="number" min="100" max="4000" required value="844"></label>
+        <label>Pixel ratio<input id="cDpr" type="number" min="1" max="5" step="0.25" required value="3"></label>
+      </div>
+      <div class="r3 two">
+        <label>Type
+          <select id="cType"><option value="phone">Phone</option><option value="tablet">Tablet</option><option value="watch">Watch</option><option value="desktop">Desktop</option></select>
+        </label>
+        <label>User agent
+          <select id="cOs"><option value="ios">iOS Safari</option><option value="android">Android Chrome</option><option value="win">Windows Chrome</option><option value="mac">macOS Chrome</option></select>
+        </label>
+      </div>
+      <div class="actions">
+        <button class="btn ghost" type="button" id="cCancel">Cancel</button>
+        <button class="btn primary" type="submit">Save device</button>
+      </div>
+    </form>
+  </dialog>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="devices.js"></script>
+  <script src="simulator.js"></script>
+</body>
+</html>

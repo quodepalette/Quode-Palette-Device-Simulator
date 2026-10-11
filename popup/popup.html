@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <header>
+    <img src="../icons/icon48.png" alt="" width="32" height="32">
+    <div><b>Quode Palette</b><small>Device Simulator</small></div>
+  </header>
+
+  <label class="f">Page
+    <input id="url" type="text" spellcheck="false" placeholder="https://example.com">
+  </label>
+
+  <label class="f">Device
+    <select id="device"></select>
+  </label>
+
+  <button id="open" class="primary">Open simulator</button>
+  <p class="hint">Tip: right-click any page or link and choose <b>Open in Quode Palette Simulator</b>.<br>Shortcut: <kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>M</kbd></p>
+
+  <script src="../simulator/devices.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

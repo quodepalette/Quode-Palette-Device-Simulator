@@ -1,0 +1,504 @@
+:root {
+  --bg: #0b0c14; --stage: #0b0c14; --panel: #12131d; --panel2: #1a1c2a; --line: rgba(255,255,255,.09);
+  --text: #e9eaf4; --mute: #8a8ca3; --accent: #7c5cff; --accent2: #22d3ee;
+  --grad: linear-gradient(135deg, #7c5cff, #22d3ee);
+  --dot: rgba(255,255,255,.075);
+  color-scheme: dark;
+}
+:root[data-theme="light"] {
+  --bg: #eceef6; --stage: #eceef6; --panel: #ffffff; --panel2: #f3f4fa; --line: rgba(20,22,40,.11);
+  --text: #171827; --mute: #6b6d86; --dot: rgba(20,22,40,.1);
+  color-scheme: light;
+}
+
+* { box-sizing: border-box; }
+html, body { height: 100%; margin: 0; }
+body { background: var(--bg); color: var(--text); font: 13px/1.4 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; overflow: hidden; }
+svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+button, input, select { font: inherit; color: inherit; }
+[hidden] { display: none !important; }
+
+.app { position: relative; display: flex; flex-direction: column; height: 100%; }
+
+/* ---------- top bar ---------- */
+.bar { display: flex; align-items: center; gap: 12px; height: 58px; padding: 0 14px; background: var(--panel); border-bottom: 1px solid var(--line); flex: none; z-index: 5; }
+.brand { display: flex; align-items: center; gap: 10px; min-width: 170px; }
+.brand b { display: block; font-size: 14px; letter-spacing: .2px; }
+.brand small { display: block; color: var(--mute); font-size: 11px; margin-top: -1px; }
+
+.url { flex: 1; display: flex; align-items: center; gap: 8px; min-width: 120px; max-width: 640px; margin: 0 auto 0 0; height: 38px; padding: 0 5px 0 12px; background: var(--panel2); border: 1px solid var(--line); border-radius: 999px; color: var(--mute); transition: border-color .15s, box-shadow .15s; }
+.url:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(124,92,255,.22); }
+.url input { flex: 1; min-width: 0; background: none; border: 0; outline: 0; color: var(--text); }
+.go { height: 28px; padding: 0 16px; border: 0; border-radius: 999px; cursor: pointer; background: var(--grad); color: #fff; font-weight: 600; }
+.go:hover { filter: brightness(1.08); }
+
+.tools { display: flex; align-items: center; gap: 5px; }
+.sep { width: 1px; height: 22px; background: var(--line); margin: 0 4px; }
+.ib { display: inline-grid; place-items: center; width: 36px; height: 36px; padding: 0; background: transparent; border: 1px solid transparent; border-radius: 9px; cursor: pointer; color: var(--mute); transition: background .12s, color .12s; }
+.ib:hover { background: var(--panel2); color: var(--text); }
+.ib:active { transform: translateY(1px); }
+.ib.tog[aria-pressed="true"] { background: rgba(124,92,255,.18); color: #a99bff; border-color: rgba(124,92,255,.45); }
+:root[data-theme="light"] .ib.tog[aria-pressed="true"] { color: #5b3df0; }
+.ib:focus-visible, .pill:focus-visible, .tile:focus-visible, .sl:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.pill { display: inline-flex; align-items: center; gap: 8px; height: 36px; padding: 0 13px 0 11px; background: var(--panel2); border: 1px solid var(--line); border-radius: 999px; cursor: pointer; max-width: 210px; }
+.pill:hover, .pill[aria-expanded="true"] { border-color: var(--accent); }
+.pill span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 600; }
+
+/* custom chevron so the arrow sits comfortably inside the box instead of hugging the right edge */
+select {
+  -webkit-appearance: none; appearance: none;
+  height: 34px; padding: 0 36px 0 12px; border: 1px solid var(--line); border-radius: 9px; cursor: pointer; outline: 0;
+  background-color: var(--panel2);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12' fill='none' stroke='%238a8ca3' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2.5 4.5 6 8l3.5-3.5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 13px center; background-size: 12px 12px;
+  text-overflow: ellipsis;
+}
+:root[data-theme="light"] select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12' fill='none' stroke='%236b6d86' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2.5 4.5 6 8l3.5-3.5'/%3E%3C/svg%3E");
+}
+select:hover { border-color: rgba(124,92,255,.55); }
+select option { background: var(--panel); color: var(--text); }
+select:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+
+/* ---------- stage ---------- */
+.stage { flex: 1; position: relative; overflow: auto; min-height: 0; background-color: var(--stage); background-image: radial-gradient(var(--dotc, var(--dot)) 1px, transparent 1px); background-size: 22px 22px; }
+.stage.nodots { background-image: none; }
+.stage::-webkit-scrollbar { width: 10px; height: 10px; }
+.stage::-webkit-scrollbar-thumb { background: var(--line); border-radius: 10px; border: 2px solid transparent; background-clip: content-box; }
+.slots { min-height: 100%; min-width: 100%; width: max-content; display: flex; align-items: flex-start; justify-content: center; gap: 44px; padding: 24px 40px; }
+.slot { display: flex; flex-direction: column; align-items: center; flex: none; margin-block: auto; }
+.slot-h { display: flex; align-items: center; gap: 10px; height: 40px; margin-bottom: 12px; max-width: 100%; }
+.nolabels .slot-h { display: none; }
+.slot-t b { display: block; font-weight: 600; white-space: nowrap; }
+.slot-t span { color: var(--mute); font-size: 11px; }
+.slot-a { display: flex; gap: 4px; }
+.slot-a button { display: grid; place-items: center; width: 28px; height: 28px; padding: 0; border-radius: 8px; cursor: pointer; background: var(--panel); border: 1px solid var(--line); color: var(--mute); }
+.slot-a button svg { width: 15px; height: 15px; }
+.slot-a button:hover { color: var(--text); border-color: var(--accent); }
+
+.empty { position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; text-align: center; gap: 8px; padding: 24px; pointer-events: none; }
+.empty img { filter: drop-shadow(0 12px 24px rgba(124,92,255,.45)); }
+.empty h1 { margin: 10px 0 0; font-size: 22px; letter-spacing: -.2px; }
+.empty p { margin: 0; color: var(--mute); max-width: 420px; }
+.stage.light-bg .empty { color: #171827; }
+
+/* fullscreen: devices only */
+.fs-x { display: none; position: fixed; top: 14px; right: 14px; z-index: 20; width: 32px; height: 32px; place-items: center; padding: 0; border-radius: 50%; cursor: pointer; border: 0; background: rgba(120,120,135,.28); color: #fff; opacity: .4; transition: opacity .15s, background .15s; }
+.fs-x svg { width: 15px; height: 15px; }
+.fs-x:hover, .fs-x:focus-visible { opacity: 1; background: rgba(120,120,135,.7); }
+.fs .bar, .fs .panel { display: none !important; }
+.fs .fs-x { display: grid; }
+.fs .slot-h { display: none; }
+.fs .slots { padding: 20px; }
+
+/* ---------- floating panels ---------- */
+.panel { position: fixed; top: 66px; right: 12px; z-index: 30; background: var(--panel); color: var(--text); border: 1px solid var(--line); border-radius: 14px; box-shadow: 0 30px 70px rgba(0,0,0,.5); max-height: calc(100vh - 80px); display: flex; flex-direction: column; overflow: hidden; }
+.picker { width: 470px; max-width: calc(100vw - 24px); }
+.p-head { padding: 14px 16px 10px; }
+.p-title { font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--mute); margin-bottom: 10px; }
+.p-slots { display: flex; gap: 10px; flex-wrap: wrap; }
+.sl { position: relative; width: 54px; height: 54px; display: grid; place-items: center; padding: 0; border-radius: 50%; cursor: pointer; background: var(--panel2); border: 2px solid transparent; color: var(--text); }
+.sl.on { border-color: var(--accent2); box-shadow: 0 0 0 3px rgba(34,211,238,.15); }
+.sl svg { width: 30px; height: 30px; stroke-width: 1.5; }
+.sl .x { position: absolute; top: -5px; right: -5px; width: 20px; height: 20px; display: none; place-items: center; padding: 0; border-radius: 50%; background: #ef4444; color: #fff; box-shadow: 0 0 0 2px var(--panel, #fff), 0 1px 3px rgba(0,0,0,.3); cursor: pointer; }
+.sl .x svg { display: block; width: 11px; height: 11px; stroke-width: 1.8; flex: none; pointer-events: none; }
+.sl .x:hover { background: #dc2626; }
+.sl:hover .x { display: grid; }
+.sl.add { border: 2px dashed var(--line); background: transparent; color: var(--mute); }
+.sl.add:hover:not(:disabled) { border-color: var(--accent); color: var(--text); }
+.sl.add:disabled { opacity: .4; cursor: not-allowed; }
+
+.p-search { position: relative; padding: 0 16px 8px; }
+.p-search svg { position: absolute; left: 28px; top: 10px; width: 16px; height: 16px; color: var(--mute); }
+.p-search input { width: 100%; height: 36px; padding: 0 12px 0 34px; background: var(--panel2); border: 1px solid var(--line); border-radius: 9px; outline: 0; }
+.p-body { flex: 1; overflow-y: auto; padding: 0 16px 6px; min-height: 120px; }
+.p-body::-webkit-scrollbar { width: 8px; }
+.p-body::-webkit-scrollbar-thumb { background: var(--line); border-radius: 8px; }
+.g-h { display: flex; align-items: center; gap: 8px; margin: 14px 0 8px; font-size: 13px; font-weight: 600; }
+.g-h svg { width: 16px; height: 16px; color: var(--mute); }
+.grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+.tile { position: relative; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 10px 4px 7px; min-height: 84px; border: 1px solid var(--line); border-radius: 8px; cursor: pointer; text-align: center; background: transparent; }
+.tile:hover { background: var(--panel2); }
+.tile.on { border-color: var(--accent2); background: rgba(34,211,238,.1); }
+.tile .ti { height: 36px; display: grid; place-items: center; color: var(--text); }
+.tile .ti svg { width: 38px; height: 36px; stroke-width: 1.4; }
+.tile .tn { font-size: 10.5px; line-height: 1.15; color: var(--text); overflow-wrap: anywhere; }
+.tile .star { position: absolute; top: 3px; left: 5px; font-style: normal; font-size: 13px; color: var(--mute); opacity: 0; transition: opacity .12s; line-height: 1; cursor: pointer; }
+.tile:hover .star { opacity: .9; }
+.tile .star.on { opacity: 1; color: #fbbf24; }
+.tile .del svg { display: block; width: 10px; height: 10px; stroke-width: 1.8; pointer-events: none; }
+.tile .del { position: absolute; top: 4px; right: 5px; font-style: normal; line-height: 0; color: var(--mute); display: none; cursor: pointer; }
+.tile:hover .del { display: block; }
+.tile.plus { border-style: dashed; color: var(--mute); justify-content: center; min-height: 84px; font-size: 22px; }
+.p-foot { padding: 10px 16px 14px; border-top: 1px solid var(--line); color: var(--mute); font-size: 12px; }
+.p-foot a { color: var(--accent2); }
+.none { padding: 24px 12px; color: var(--mute); text-align: center; }
+
+.drawer { width: 340px; max-width: calc(100vw - 24px); }
+.d-head { display: flex; align-items: center; justify-content: space-between; padding: 12px 12px 8px 18px; }
+.d-head h2 { margin: 0; font-size: 16px; }
+.d-body { padding: 0 18px 18px; overflow-y: auto; }
+.d-body section { padding: 12px 0; border-top: 1px solid var(--line); }
+.d-body section:first-child { border-top: 0; }
+.d-body h3 { margin: 0 0 8px; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--mute); }
+.row { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 7px 0; cursor: pointer; }
+.row > span:first-child { flex: 1; }
+.row select { max-width: 176px; min-width: 120px; }
+.row input[type="color"] { width: 44px; height: 30px; padding: 2px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel2); cursor: pointer; }
+.sw { position: relative; width: 38px; height: 22px; flex: none; }
+.sw input { position: absolute; inset: 0; opacity: 0; margin: 0; cursor: pointer; z-index: 1; }
+.sw i { position: absolute; inset: 0; border-radius: 999px; background: var(--panel2); border: 1px solid var(--line); transition: background .15s; }
+.sw i::after { content: ""; position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; border-radius: 50%; background: var(--mute); transition: transform .15s, background .15s; }
+.sw input:checked + i { background: var(--accent); border-color: var(--accent); }
+.sw input:checked + i::after { transform: translateX(16px); background: #fff; }
+.sw input:focus-visible + i { outline: 2px solid var(--accent2); outline-offset: 2px; }
+
+.btn { height: 36px; padding: 0 14px; border-radius: 9px; cursor: pointer; width: 100%; border: 1px dashed var(--line); background: transparent; color: var(--text); }
+.btn:hover { border-color: var(--accent); }
+.btn.primary { background: var(--grad); border: 0; color: #fff; font-weight: 600; width: auto; }
+.btn.ghost { border-style: solid; width: auto; }
+
+/* ---------- dialog & toast ---------- */
+dialog { width: 420px; max-width: calc(100vw - 32px); padding: 0; background: var(--panel); color: var(--text); border: 1px solid var(--line); border-radius: 14px; box-shadow: 0 40px 80px rgba(0,0,0,.55); }
+dialog::backdrop { background: rgba(5,6,12,.6); backdrop-filter: blur(3px); }
+dialog form { padding: 20px; display: grid; gap: 14px; }
+dialog h2 { margin: 0; font-size: 17px; }
+dialog label { display: grid; gap: 6px; color: var(--mute); font-size: 12px; }
+dialog input, dialog select { height: 36px; padding: 0 10px; background-color: var(--panel2); color: var(--text); border: 1px solid var(--line); border-radius: 9px; width: 100%; }
+dialog select { padding-right: 36px; }
+.r3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.r3.two { grid-template-columns: repeat(2, 1fr); }
+.actions { display: flex; justify-content: flex-end; gap: 8px; }
+.toast { position: fixed; left: 50%; bottom: 24px; transform: translate(-50%, 20px); opacity: 0; pointer-events: none; max-width: min(560px, calc(100vw - 32px)); padding: 11px 16px; border-radius: 10px; background: var(--panel2); color: var(--text); border: 1px solid var(--line); box-shadow: 0 16px 40px rgba(0,0,0,.4); transition: opacity .2s, transform .2s; z-index: 50; }
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+@media (max-width: 1250px) { .brand div { display: none; } .brand { min-width: 0; } }
+@media (max-width: 980px) { #devLabel { display: none; } }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+
+/* =====================================================================
+ *  Device frames
+ *  Layers from back to front: ground shadow, straps and stands, side buttons, metal body (with a
+ *  polished edge ring and antenna bands), bezel glass, screen (the page), then cut-outs, home bar
+ *  and glass sheen. The screen sits on a black layer so nothing light shows around its edges.
+ * ===================================================================== */
+.holder { position: relative; flex: none; }
+.device {
+  --fa: #5a5c66; --fb: #1a1b20; --rim: 3px; --orad: 40px; --es: 0px; --eb: 0px; --nwv: 164px;
+  position: absolute; transform-origin: 0 0; border-radius: var(--orad);
+}
+.device[data-nw="wide"] { --nwv: 209px; }
+.device[data-fc="spacegray"] { --fa: #a3a5ab; --fb: #2a2b32; }
+.device[data-fc="forest"] { --fa: #84928c; --fb: #1a201f; }
+.device[data-fc="black"]    { --fa: #5c5e69; --fb: #17181d; }
+.device[data-fc="titanium"] { --fa: #d3cdc3; --fb: #77726a; }
+.device[data-fc="silver"]   { --fa: #f2f3f7; --fb: #a9acb8; }
+.device[data-fc="gold"]     { --fa: #f7e4be; --fb: #bd9b62; }
+.device[data-fc="purple"]   { --fa: #8a76a8; --fb: #382a50; }
+.device[data-fc="blue"]     { --fa: #7a98c2; --fb: #2a3a54; }
+
+/* Metal body */
+.framed .device {
+  background:
+    linear-gradient(100deg, rgba(255,255,255,.24), rgba(255,255,255,0) 20%, rgba(0,0,0,0) 74%, rgba(0,0,0,.30)),
+    linear-gradient(180deg, var(--fa), var(--fb) 46%, var(--fa) 100%);
+  box-shadow: 0 0 0 .6px rgba(0,0,0,.75), 0 46px 66px -30px rgba(0,0,0,.66), 0 16px 26px -16px rgba(0,0,0,.5);
+}
+/* Polished outer edge: a thin specular ring that follows the corner radius */
+.framed .device::before {
+  content: ""; position: absolute; inset: 0; border-radius: inherit; padding: 1.5px; pointer-events: none;
+  background: conic-gradient(from 20deg, rgba(255,255,255,.8), rgba(255,255,255,.06) 16%, rgba(255,255,255,.42) 31%, rgba(255,255,255,.05) 48%, rgba(255,255,255,.75) 64%, rgba(255,255,255,.06) 82%, rgba(255,255,255,.8));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor;
+          mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+}
+/* Antenna bands across the rim (phones) */
+.framed .device:is([data-kind="island"], [data-kind="notch"], [data-kind="punch"], [data-kind="home"])::after {
+  content: ""; position: absolute; inset: 0; border-radius: inherit; padding: var(--rim); pointer-events: none;
+  background:
+    linear-gradient(rgba(0,0,0,.42), rgba(0,0,0,.42)) 0 11% / 100% 1.6px no-repeat,
+    linear-gradient(rgba(0,0,0,.42), rgba(0,0,0,.42)) 0 89% / 100% 1.6px no-repeat,
+    linear-gradient(90deg, rgba(0,0,0,.42), rgba(0,0,0,.42)) 12% 0 / 1.6px 100% no-repeat,
+    linear-gradient(90deg, rgba(0,0,0,.42), rgba(0,0,0,.42)) 88% 0 / 1.6px 100% no-repeat;
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor;
+          mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+}
+.unframed .device { box-shadow: none !important; outline: 0 !important; border: 0 !important; background: transparent; }
+.unframed .device::before, .unframed .device::after { display: none !important; }
+.unframed .device > :not(.screen) { display: none !important; }
+
+/* Black glass behind the page */
+.bezel {
+  position: absolute; inset: var(--rim); border-radius: calc(var(--orad) - var(--rim));
+  background: linear-gradient(150deg, #181920 0%, #050507 36%, #0a0b0f 100%);
+  box-shadow: 0 0 0 1px rgba(0,0,0,.7);
+}
+
+/* The screen: a black base with a white layer inset by 1px, so anti-aliased edges never show a light line */
+.screen { position: absolute; overflow: hidden; background: #000; isolation: isolate; border: 0 !important; outline: 0 !important; box-shadow: none !important; }
+.screen::before { content: ""; position: absolute; inset: 1px; border-radius: inherit; background: #fff; z-index: -1; }
+.screen::after { content: ""; position: absolute; inset: 0; border-radius: inherit; box-shadow: inset 0 0 0 1px #000; pointer-events: none; z-index: 5; }
+.unframed .screen { background: #fff; }
+.unframed .screen::before, .unframed .screen::after { display: none; }
+.screen iframe { display: block; width: 100%; height: 100%; border: 0; background: transparent; }
+
+/* Hardware parts (hidden until a device kind turns them on) */
+.sb, .strap, .base, .stand, .cam, .speaker, .hbtn, .chin, .hg { position: absolute; display: none; }
+.cut, .homebar, .crease, .glare { position: absolute; pointer-events: none; z-index: 3; display: none; }
+.cut b { position: absolute; display: none; border-radius: 50%; }
+
+/* Soft glass sheen over the page (phones and tablets) */
+.glare { inset: 0; z-index: 4; background: linear-gradient(112deg, rgba(255,255,255,.055) 0%, rgba(255,255,255,.02) 30%, rgba(255,255,255,0) 31.5%); }
+.framed .device:is([data-kind="island"], [data-kind="notch"], [data-kind="punch"], [data-kind="bar"], [data-kind="home"], [data-kind="tablet"], [data-kind="watch"]) .glare { display: block; }
+
+/* ---------- Side buttons (positions are percentages along the edge and rotate with the device) ---------- */
+.sb { z-index: -1; --p: 0%; --s: 5%; box-shadow: inset 0 0 0 .5px rgba(0,0,0,.5); }
+.sb.l1, .sb.l2, .sb.l3 { left: -3.5px; width: 5px; top: var(--p); height: var(--s); border-radius: 3px 0 0 3px; background: linear-gradient(270deg, var(--fa), var(--fb)); }
+.sb.r1, .sb.r2 { right: -3.5px; width: 5px; top: var(--p); height: var(--s); border-radius: 0 3px 3px 0; background: linear-gradient(90deg, var(--fa), var(--fb)); }
+/* Landscape is a counter-clockwise turn: the right edge becomes the top, the left edge the bottom */
+.device[data-land="true"] :is(.l1, .l2, .l3) { left: var(--p); top: auto; bottom: -3.5px; width: var(--s); height: 5px; border-radius: 0 0 3px 3px; background: linear-gradient(0deg, var(--fa), var(--fb)); }
+.device[data-land="true"] :is(.r1, .r2) { right: auto; left: var(--p); top: -3.5px; width: var(--s); height: 5px; border-radius: 3px 3px 0 0; background: linear-gradient(180deg, var(--fa), var(--fb)); }
+
+.device:is([data-kind="island"], [data-kind="notch"]) :is(.l1, .l2, .l3, .r1) { display: block; }
+.device:is([data-kind="island"], [data-kind="notch"]) .l1 { --p: 13%; --s: 3.2%; }
+.device:is([data-kind="island"], [data-kind="notch"]) .l2 { --p: 19.5%; --s: 6.2%; }
+.device:is([data-kind="island"], [data-kind="notch"]) .l3 { --p: 28%; --s: 6.2%; }
+.device:is([data-kind="island"], [data-kind="notch"]) .r1 { --p: 24%; --s: 10.5%; }
+
+.device:is([data-kind="punch"], [data-kind="bar"]) :is(.r1, .r2) { display: block; }
+.device:is([data-kind="punch"], [data-kind="bar"]) .r1 { --p: 20%; --s: 8%; }
+.device:is([data-kind="punch"], [data-kind="bar"]) .r2 { --p: 31%; --s: 5.5%; }
+
+/* iPhone 5 and SE: volume on the left, sleep button on the top edge */
+.device[data-kind="home"] :is(.l1, .l2, .l3, .r1) { display: block; }
+.device[data-kind="home"] .l1 { --p: 12%; --s: 3%; }
+.device[data-kind="home"] .l2 { --p: 18.5%; --s: 5.5%; }
+.device[data-kind="home"] .l3 { --p: 25.5%; --s: 5.5%; }
+.device[data-kind="home"] .r1 { right: 14%; left: auto; top: -3.5px; width: 11%; height: 5px; border-radius: 3px 3px 0 0; background: linear-gradient(180deg, var(--fa), var(--fb)); }
+.device[data-kind="home"][data-land="true"] .r1 { right: auto; left: -3.5px; top: 14%; width: 5px; height: 11%; border-radius: 3px 0 0 3px; background: linear-gradient(270deg, var(--fa), var(--fb)); }
+
+/* Tablets: volume on the right edge, power on the top edge */
+.device[data-kind="tablet"] :is(.r1, .r2) { display: block; }
+.device[data-kind="tablet"] .r1 { --p: 5%; --s: 8%; }
+.device[data-kind="tablet"] .r2 { right: 6%; left: auto; top: -3.5px; width: 5%; height: 5px; border-radius: 3px 3px 0 0; background: linear-gradient(180deg, var(--fa), var(--fb)); }
+.device[data-kind="tablet"][data-land="true"] .r2 { right: auto; left: -3.5px; top: 6%; width: 5px; height: 5%; border-radius: 3px 0 0 3px; background: linear-gradient(270deg, var(--fa), var(--fb)); }
+
+/* ---------- iPhone: thick, realistic body ---------- */
+/* Chunkier side buttons that stand out from the rim */
+.device:is([data-kind="island"], [data-kind="notch"]) :is(.l1, .l2, .l3) { left: -5px; width: 7px; border-radius: 4px 0 0 4px; }
+.device:is([data-kind="island"], [data-kind="notch"]) .r1 { right: -5px; width: 7px; border-radius: 0 4px 4px 0; }
+.device[data-land="true"]:is([data-kind="island"], [data-kind="notch"]) :is(.l1, .l2, .l3) { left: var(--p); bottom: -5px; width: var(--s); height: 7px; border-radius: 0 0 4px 4px; }
+.device[data-land="true"]:is([data-kind="island"], [data-kind="notch"]) .r1 { left: var(--p); right: auto; top: -5px; width: var(--s); height: 7px; border-radius: 4px 4px 0 0; }
+.sb { box-shadow: inset 0 0 0 .5px rgba(0,0,0,.55), inset 0 1.5px 1px rgba(255,255,255,.28); }
+/* Deep glass bezel: a dark inner lip where the glass meets the metal, plus a faint inner highlight */
+.framed .device:is([data-kind="island"], [data-kind="notch"]) .bezel {
+  background: linear-gradient(145deg, #1c1d24 0%, #08090c 38%, #000 62%, #0d0e13 100%);
+  box-shadow: 0 0 0 1px rgba(0,0,0,.85), inset 0 0 0 1.5px #000, inset 0 0 0 2.5px rgba(255,255,255,.07), inset 0 0 22px rgba(0,0,0,.95);
+}
+/* A slightly stronger sheen so the thick rim reads as polished metal */
+.framed .device:is([data-kind="island"], [data-kind="notch"]) {
+  box-shadow: 0 0 0 .8px rgba(0,0,0,.85), inset 0 0 0 1.5px rgba(255,255,255,.18), inset 0 0 0 3.5px rgba(0,0,0,.18), 0 54px 72px -32px rgba(0,0,0,.7), 0 18px 30px -16px rgba(0,0,0,.55);
+}
+
+/* ---------- iPhone: Dynamic Island ---------- */
+.framed .device[data-kind="island"] .cut { display: block; top: 13px; left: 50%; width: 124px; height: 36px; margin-left: -62px; border-radius: 20px; background: #000; }
+.framed .device[data-kind="island"] .cut b:nth-child(1) { display: block; right: 13px; top: 50%; width: 14px; height: 14px; margin-top: -7px; background: radial-gradient(circle at 38% 36%, #46578a 0 8%, #131b36 22%, #05070f 52%, #000 62%); box-shadow: 0 0 0 2.5px #07080b; }
+.framed .device[data-kind="island"] .cut b:nth-child(2) { display: block; right: 40px; top: 50%; width: 9px; height: 9px; margin-top: -4.5px; background: radial-gradient(circle, #12151f 0 40%, #000 72%); }
+.framed .device[data-kind="island"][data-land="true"] .cut { top: 50%; left: 12px; width: 36px; height: 124px; margin: -62px 0 0 0; }
+.framed .device[data-kind="island"][data-land="true"] .cut b:nth-child(1) { right: auto; left: 50%; top: 13px; margin: 0 0 0 -7px; }
+.framed .device[data-kind="island"][data-land="true"] .cut b:nth-child(2) { right: auto; left: 50%; top: 40px; margin: 0 0 0 -4.5px; }
+
+/* ---------- iPhone: notch with curved shoulders ---------- */
+.framed .device[data-kind="notch"] .cut { display: block; top: 0; left: 50%; width: var(--nwv); height: 31px; margin-left: calc(var(--nwv) / -2); border-radius: 0 0 22px 22px; background: #000; }
+.framed .device[data-kind="notch"] .cut::before, .framed .device[data-kind="notch"] .cut::after { content: ""; position: absolute; top: 0; width: 14px; height: 14px; }
+.framed .device[data-kind="notch"] .cut::before { right: 100%; background: radial-gradient(circle at 0 100%, transparent 13.5px, #000 14px); }
+.framed .device[data-kind="notch"] .cut::after { left: 100%; background: radial-gradient(circle at 100% 100%, transparent 13.5px, #000 14px); }
+.framed .device[data-kind="notch"] .cut b:nth-child(1) { display: block; left: 50%; top: 9px; width: 56px; height: 6px; margin-left: -28px; border-radius: 3px; background: linear-gradient(#0c0d12, #1b1c23); box-shadow: inset 0 1px 1px rgba(0,0,0,.9); }
+.framed .device[data-kind="notch"] .cut b:nth-child(2) { display: block; left: 50%; top: 6.5px; width: 11px; height: 11px; margin-left: 40px; background: radial-gradient(circle at 38% 36%, #3b4a78 0 10%, #0f1630 28%, #03040a 58%, #000 66%); box-shadow: 0 0 0 1.5px #07080b; }
+.framed .device[data-kind="notch"][data-land="true"] .cut { top: 50%; left: 0; width: 31px; height: var(--nwv); margin: calc(var(--nwv) / -2) 0 0 0; border-radius: 0 22px 22px 0; }
+.framed .device[data-kind="notch"][data-land="true"] .cut::before, .framed .device[data-kind="notch"][data-land="true"] .cut::after { display: none; }
+.framed .device[data-kind="notch"][data-land="true"] .cut b:nth-child(1) { left: 9px; top: 50%; width: 6px; height: 56px; margin: -28px 0 0 0; }
+.framed .device[data-kind="notch"][data-land="true"] .cut b:nth-child(2) { left: 6.5px; top: 50%; margin: -51px 0 0 0; }
+
+/* iPhone home indicator */
+.framed .device:is([data-kind="island"], [data-kind="notch"]) .homebar { display: block; left: 50%; bottom: 9px; width: 140px; height: 5px; margin-left: -70px; border-radius: 3px; background: #fff; mix-blend-mode: difference; opacity: .85; }
+
+/* ---------- Android: punch-hole camera ---------- */
+.framed .device[data-kind="punch"] .cut { display: block; top: 13px; left: 50%; width: 14px; height: 14px; margin-left: -7px; border-radius: 50%; background: radial-gradient(circle at 38% 36%, #2b3556 0 10%, #0b0f1e 30%, #020308 58%, #000 66%); box-shadow: 0 0 0 2px #0b0c11; }
+.framed .device[data-kind="punch"][data-land="true"] .cut { top: 50%; left: 13px; margin: -7px 0 0 0; }
+
+/* ---------- older Android with a top/bottom bar ---------- */
+.framed .device[data-kind="bar"] :is(.speaker, .cam) { display: block; }
+.framed .device[data-kind="bar"] .speaker { top: 15px; left: 50%; width: 58px; height: 6px; margin-left: -29px; border-radius: 3px; background: #101116; box-shadow: inset 0 1px 1px rgba(0,0,0,.9); }
+.framed .device[data-kind="bar"] .cam { top: 13px; left: calc(50% + 46px); width: 10px; height: 10px; border-radius: 50%; background: radial-gradient(circle at 38% 36%, #3b4a78 0 10%, #0f1630 30%, #03040a 62%); }
+
+/* ---------- iPhone 5 / SE: speaker, camera, home button ---------- */
+.framed .device[data-kind="home"] :is(.speaker, .cam, .hbtn) { display: block; }
+.framed .device[data-kind="home"] .speaker { top: 44px; left: 50%; width: 64px; height: 8px; margin-left: -32px; border-radius: 4px; background: linear-gradient(#0a0a0d, #1d1e25); box-shadow: inset 0 1px 2px rgba(0,0,0,.95); }
+.framed .device[data-kind="home"] .cam { top: 42px; left: calc(50% - 74px); width: 11px; height: 11px; border-radius: 50%; background: radial-gradient(circle at 38% 36%, #3b4a78 0 10%, #0f1630 30%, #03040a 62%); box-shadow: 0 0 0 2px #0a0a0d; }
+.framed .device[data-kind="home"] .hbtn { bottom: 27px; left: 50%; width: 58px; height: 58px; margin-left: -29px; border-radius: 50%; background: radial-gradient(circle at 35% 28%, #1e1f26, #0a0a0d 72%); box-shadow: 0 0 0 2px #050507, 0 0 0 3px rgba(255,255,255,.05); }
+.framed .device[data-kind="home"] .hbtn::after { content: ""; position: absolute; inset: 19px; border: 2px solid #3b3c47; border-radius: 7px; }
+.framed .device[data-kind="home"][data-land="true"] .speaker { top: 50%; left: 44px; width: 8px; height: 64px; margin: -32px 0 0 0; background: linear-gradient(90deg, #0a0a0d, #1d1e25); }
+.framed .device[data-kind="home"][data-land="true"] .cam { top: calc(50% - 74px); left: 42px; }
+.framed .device[data-kind="home"][data-land="true"] .hbtn { bottom: auto; left: auto; right: 27px; top: 50%; margin: -29px 0 0 0; }
+
+/* ---------- tablets ---------- */
+.framed .device[data-kind="tablet"] .cam { display: block; top: 14px; left: 50%; width: 8px; height: 8px; margin-left: -4px; border-radius: 50%; background: radial-gradient(circle at 38% 36%, #3b4a78 0 10%, #0f1630 30%, #03040a 62%); box-shadow: 0 0 0 1.5px #08090c; }
+.framed .device[data-kind="tablet"][data-land="true"] .cam { top: 50%; left: 14px; margin: -4px 0 0 0; }
+
+/* ---------- laptop / monitor / hub cameras + label ---------- */
+.framed .device:is([data-kind="monitor"], [data-kind="hub"]) .cam { display: block; top: 5px; left: 50%; width: 5px; height: 5px; margin-left: -2.5px; border-radius: 50%; background: radial-gradient(circle at 38% 36%, #3b4a78 0 12%, #0f1630 40%, #03040a 70%); }
+.framed .device[data-kind="monitor"] .cam { top: 6px; }
+.framed .device .chin { display: block; left: 0; right: 0; bottom: 3px; text-align: center; font: 500 11px/20px system-ui, sans-serif; letter-spacing: .02em; color: rgba(255,255,255,.5); pointer-events: none; }
+.framed .device[data-kind="monitor"] .chin { bottom: 20px; }
+
+/* ---------- laptop: black lid with a thin metal edge, chin strip + label, wide tapered base ---------- */
+.framed .device[data-kind="laptop"] {
+  border-radius: var(--orad) var(--orad) 10px 10px;
+  background: #050506;
+  box-shadow: 0 0 0 .5px rgba(0,0,0,.6);
+}
+/* metal edge: lit from the top, fading down the sides */
+.framed .device[data-kind="laptop"]::before {
+  padding: 2px; opacity: .95;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--fa) 85%, #fff) 0%, color-mix(in srgb, var(--fa) 55%, var(--fb)) 22%, var(--fb) 70%, color-mix(in srgb, var(--fb) 70%, #000) 100%);
+}
+.framed .device[data-kind="laptop"] .bezel { border-radius: calc(var(--orad) - var(--rim)) calc(var(--orad) - var(--rim)) 8px 8px; background: #000; box-shadow: none; }
+/* camera in the top bezel */
+.framed .device[data-kind="laptop"] .cam { display: block; top: 35px; left: 50%; width: 8px; height: 8px; margin-left: -4px; border-radius: 50%; background: radial-gradient(circle at 40% 38%, #232a40 0 14%, #0b0e19 45%, #030409 75%); box-shadow: 0 0 0 1.5px #09090b; z-index: 2; }
+/* chin strip (only when the device has a label) */
+.framed .device[data-kind="laptop"]:not([data-chin=""]) .chin {
+  left: 2px; right: 2px; bottom: 2px; height: 36px; border-radius: 0 0 8px 8px; background: #19191a;
+  font: 400 22px/36px system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; letter-spacing: .01em; color: rgba(226,227,232,.88); z-index: 2;
+}
+.framed .device[data-kind="laptop"][data-chin=""] .chin { display: none; }
+
+/* base: bright top lip, dark body, underside curving up towards both ends */
+.framed .device[data-kind="laptop"] .base {
+  display: block; top: 100%; left: calc(var(--es) * -1); right: calc(var(--es) * -1); height: var(--eb); margin-top: -1px;
+  border-radius: 3px 3px 11% 11% / 3px 3px 82% 82%;
+  background:
+    linear-gradient(90deg, rgba(0,0,0,.34), rgba(0,0,0,0) 9%, rgba(0,0,0,0) 91%, rgba(0,0,0,.34)),
+    linear-gradient(180deg, var(--fa) 0, color-mix(in srgb, var(--fa) 86%, #000) 17%, color-mix(in srgb, var(--fa) 42%, var(--fb)) 21%, color-mix(in srgb, var(--fa) 22%, var(--fb)) 58%, var(--fb) 100%);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.35);
+}
+/* soft contact line where the lid meets the base */
+.framed .device[data-kind="laptop"] .base::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(180deg, rgba(0,0,0,.45), rgba(0,0,0,0)); }
+/* thumb notch */
+.framed .device[data-kind="laptop"] .base::after { content: ""; position: absolute; top: 0; left: 50%; width: 17%; height: 22%; transform: translateX(-50%); border-radius: 0 0 40% 40% / 0 0 100% 100%; background: linear-gradient(180deg, rgba(255,255,255,.34), rgba(255,255,255,.1) 75%, rgba(0,0,0,.22)); }
+/* contact shadow under the laptop (the stand slot is unused by laptops) */
+.framed .device[data-kind="laptop"] .stand { display: block; top: 100%; left: calc(var(--es) * -1 + 4%); right: calc(var(--es) * -1 + 4%); height: 14px; margin-top: calc(var(--eb) - 9px); background: radial-gradient(ellipse at 50% 30%, rgba(0,0,0,.42), rgba(0,0,0,0) 70%); filter: blur(3px); z-index: -2; }
+
+/* ---------- monitor / tv / hub stands ---------- */
+.framed .device[data-kind="monitor"] .stand { display: block; top: 100%; left: 50%; width: 15%; height: calc(var(--eb) - 12px); margin-top: -1px; transform: translateX(-50%); background: linear-gradient(90deg, var(--fb), var(--fa) 38%, color-mix(in srgb, var(--fa) 60%, var(--fb)) 62%, var(--fb)); z-index: -1; }
+.framed .device[data-kind="monitor"] .stand::after { content: ""; position: absolute; top: 100%; left: -75%; width: 250%; height: 11px; border-radius: 4px 4px 14px 14px; background: linear-gradient(180deg, var(--fa), var(--fb)); box-shadow: 0 18px 22px -8px rgba(0,0,0,.5); }
+.framed .device[data-kind="tv"] .stand { display: block; top: 100%; left: 12%; width: 76%; height: 15px; margin-top: -1px; z-index: -1; }
+.framed .device[data-kind="tv"] .stand::before, .framed .device[data-kind="tv"] .stand::after { content: ""; position: absolute; top: 0; width: 9%; height: 15px; background: linear-gradient(180deg, #2f2f37, #0c0c10); clip-path: polygon(0 0, 100% 0, 80% 100%, 20% 100%); }
+.framed .device[data-kind="tv"] .stand::before { left: 0; } .framed .device[data-kind="tv"] .stand::after { right: 0; }
+.framed .device[data-kind="hub"] .stand { display: block; top: 100%; left: 50%; width: 46%; height: calc(var(--eb) - 6px); margin-top: -4px; transform: translateX(-50%); border-radius: 0 0 24px 24px; background: linear-gradient(180deg, #e3e5ea, #a9adb8); box-shadow: 0 16px 22px -12px rgba(0,0,0,.5); z-index: -1; }
+
+/* ---------- watch: crown, side button, textured straps ---------- */
+.device[data-kind="watch"] :is(.r1, .r2) { display: block; }
+.device[data-kind="watch"] .r1 { top: 27%; height: 15%; width: 9px; right: -8px; border-radius: 0 5px 5px 0; background: repeating-linear-gradient(180deg, rgba(0,0,0,.35) 0 1px, transparent 1px 3px), linear-gradient(90deg, var(--fb), var(--fa) 55%, var(--fb)); }
+.device[data-kind="watch"] .r2 { top: 54%; height: 10%; width: 5px; right: -4px; }
+.device[data-kind="watch"][data-land="true"] :is(.r1, .r2) { display: none; }
+.framed .device[data-kind="watch"] .strap { display: block; left: 17%; right: 17%; height: 62px; z-index: -1;
+  background: radial-gradient(circle, rgba(0,0,0,.28) 0 1.4px, transparent 2px) 0 0 / 14px 14px, linear-gradient(90deg, #17171b, #35353d 50%, #17171b); }
+.framed .device[data-kind="watch"] .strap.top { bottom: calc(100% - 4px); border-radius: 18px 18px 0 0 / 44px 44px 0 0; }
+.framed .device[data-kind="watch"] .strap.bot { top: calc(100% - 4px); border-radius: 0 0 18px 18px / 0 0 44px 44px; }
+
+/* ---------- foldables: hinge gap in the frame + soft crease in the glass ---------- */
+.framed .device[data-fold] .crease { display: block; }
+.framed .device[data-fold="v"]:not([data-land="true"]) .crease, .framed .device[data-fold="h"][data-land="true"] .crease { top: 0; bottom: 0; left: 50%; right: auto; width: 28px; height: auto; margin: 0 0 0 -14px; background: linear-gradient(90deg, rgba(0,0,0,0), rgba(0,0,0,.2) 42%, rgba(255,255,255,.07) 56%, rgba(0,0,0,0)); }
+.framed .device[data-fold="h"]:not([data-land="true"]) .crease, .framed .device[data-fold="v"][data-land="true"] .crease { left: 0; right: 0; top: 50%; bottom: auto; height: 28px; width: auto; margin: -14px 0 0 0; background: linear-gradient(180deg, rgba(0,0,0,0), rgba(0,0,0,.2) 42%, rgba(255,255,255,.07) 56%, rgba(0,0,0,0)); }
+.framed .device[data-fold] .hg { display: block; z-index: 0; background: linear-gradient(90deg, rgba(0,0,0,.55), rgba(0,0,0,.12) 30%, rgba(0,0,0,.12) 70%, rgba(0,0,0,.55)); }
+.framed .device[data-fold="v"]:not([data-land="true"]) .hg, .framed .device[data-fold="h"][data-land="true"] .hg { top: 0; bottom: 0; left: 50%; width: 7px; margin-left: -3.5px; border-radius: 3px; }
+.framed .device[data-fold="h"]:not([data-land="true"]) .hg, .framed .device[data-fold="v"][data-land="true"] .hg { left: 0; right: 0; top: 50%; height: 7px; margin-top: -3.5px; border-radius: 3px; background: linear-gradient(180deg, rgba(0,0,0,.55), rgba(0,0,0,.12) 30%, rgba(0,0,0,.12) 70%, rgba(0,0,0,.55)); }
+
+/* =====================================================================
+ *  Laptops: glass sheen, edge light, hinge shadow, brushed metal base and ground shadow
+ * ===================================================================== */
+/* glass reflection across the display */
+.framed .device[data-kind="laptop"] .glare { display: block; background:
+  linear-gradient(115deg, rgba(255,255,255,.075) 0%, rgba(255,255,255,.028) 24%, rgba(255,255,255,0) 25%),
+  linear-gradient(180deg, rgba(255,255,255,.035), rgba(255,255,255,0) 18%); }
+/* lid: faint satin gradient + inner edge catching light + soft dark vignette around the glass */
+.framed .device[data-kind="laptop"] { background: linear-gradient(180deg, #0d0d0f 0%, #040405 40%, #08080a 100%); }
+.framed .device[data-kind="laptop"] .bezel {
+  background: linear-gradient(180deg, #0a0a0c, #000 30%, #000 80%, #0b0b0d);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.07), inset 0 0 0 1px rgba(255,255,255,.025);
+}
+.framed .device[data-kind="laptop"] .screen { box-shadow: 0 0 0 1px rgba(255,255,255,.035), 0 0 18px 2px rgba(0,0,0,.65) !important; }
+/* specular hot-spots on the rim at the top corners */
+.framed .device[data-kind="laptop"]::before {
+  background:
+    radial-gradient(60px 40px at 6% 0, rgba(255,255,255,.55), rgba(255,255,255,0) 70%),
+    radial-gradient(60px 40px at 94% 0, rgba(255,255,255,.4), rgba(255,255,255,0) 70%),
+    linear-gradient(180deg, color-mix(in srgb, var(--fa) 85%, #fff) 0%, color-mix(in srgb, var(--fa) 55%, var(--fb)) 22%, var(--fb) 70%, color-mix(in srgb, var(--fb) 70%, #000) 100%);
+}
+/* camera: lens glint + soft ring */
+.framed .device[data-kind="laptop"] .cam { background: radial-gradient(circle at 36% 34%, #5266a0 0 9%, #1a2140 26%, #070914 55%, #020205 78%); box-shadow: 0 0 0 2px #0b0b0d, 0 0 0 3px rgba(255,255,255,.04); }
+/* chin: slight gloss + shadow where the lid drops into the hinge */
+.framed .device[data-kind="laptop"]:not([data-chin=""]) .chin {
+  background: linear-gradient(180deg, #202022 0%, #171718 55%, #0d0d0e 100%);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.06), inset 0 -6px 8px -4px rgba(0,0,0,.7);
+  text-shadow: 0 -1px 0 rgba(0,0,0,.6);
+}
+/* Base: layered metal with a bright chamfer, brushed body, deep underside and darker end caps. */
+.framed .device[data-kind="laptop"] .base {
+  background:
+    linear-gradient(90deg, rgba(0,0,0,.5), rgba(0,0,0,.12) 4%, rgba(255,255,255,.07) 14%, rgba(0,0,0,0) 32%, rgba(0,0,0,0) 68%, rgba(255,255,255,.07) 86%, rgba(0,0,0,.12) 96%, rgba(0,0,0,.5)),
+    repeating-linear-gradient(90deg, rgba(255,255,255,.012) 0 1px, rgba(0,0,0,.012) 1px 2px),
+    linear-gradient(180deg, color-mix(in srgb, var(--fa) 92%, #fff) 0, var(--fa) 8%, color-mix(in srgb, var(--fa) 78%, #000) 17%, color-mix(in srgb, var(--fa) 38%, var(--fb)) 22%, color-mix(in srgb, var(--fa) 24%, var(--fb)) 52%, var(--fb) 88%, color-mix(in srgb, var(--fb) 60%, #000) 100%);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.5), inset 0 -1px 0 rgba(255,255,255,.08);
+}
+/* hinge shadow cast by the lid onto the base */
+.framed .device[data-kind="laptop"] .base::before { height: 7px; left: 3%; right: 3%; background: linear-gradient(180deg, rgba(0,0,0,.6), rgba(0,0,0,.18) 60%, rgba(0,0,0,0)); }
+/* grounded shadow: tight contact + wide soft falloff */
+.framed .device[data-kind="laptop"] .stand {
+  height: 26px; margin-top: calc(var(--eb) - 12px);
+  background: radial-gradient(ellipse 50% 45% at 50% 30%, rgba(0,0,0,.6), rgba(0,0,0,0) 100%), radial-gradient(ellipse 50% 100% at 50% 20%, rgba(0,0,0,.28), rgba(0,0,0,0) 100%);
+  filter: blur(5px);
+}
+
+
+/* =====================================================================
+ *  Foldables: thick graphite green frame, notched hinge, larger lens and ground shadow
+ * ===================================================================== */
+.framed .device:is([data-fold="h"], [data-fold="v"]) {
+  box-shadow: none;
+  background:
+    linear-gradient(100deg, rgba(255,255,255,.2), rgba(255,255,255,0) 18%, rgba(0,0,0,0) 76%, rgba(0,0,0,.35)),
+    linear-gradient(180deg, color-mix(in srgb, var(--fa) 80%, #000), var(--fb) 50%, color-mix(in srgb, var(--fa) 55%, var(--fb)));
+}
+.framed .device:is([data-fold="h"], [data-fold="v"])::before {
+  padding: 2px; opacity: .9;
+  background: linear-gradient(160deg, color-mix(in srgb, var(--fa) 70%, #fff), color-mix(in srgb, var(--fa) 45%, var(--fb)) 35%, var(--fb) 62%, color-mix(in srgb, var(--fa) 55%, var(--fb)));
+}
+.framed .device:is([data-fold="h"], [data-fold="v"]) .bezel { background: linear-gradient(160deg, #101312, #050606 45%, #0b0d0d); box-shadow: inset 0 0 0 1px rgba(255,255,255,.04); }
+.framed .holder:has(.device:is([data-fold="h"], [data-fold="v"])) { filter: drop-shadow(0 30px 22px rgba(0,0,0,.38)) drop-shadow(0 4px 6px rgba(0,0,0,.35)); }
+
+/* hinge notch cut into the rim, fold line in the middle of the body */
+.framed .device:is([data-fold="h"]:not([data-land="true"]), [data-fold="v"][data-land="true"]) {
+  clip-path: polygon(-40px -40px, calc(100% + 40px) -40px, calc(100% + 40px) calc(50% - 15px), calc(100% - 9px) calc(50% - 12px), calc(100% - 9px) calc(50% + 12px), calc(100% + 40px) calc(50% + 15px), calc(100% + 40px) calc(100% + 40px), -40px calc(100% + 40px), -40px calc(50% + 15px), 9px calc(50% + 12px), 9px calc(50% - 12px), -40px calc(50% - 15px));
+}
+.framed .device:is([data-fold="v"]:not([data-land="true"]), [data-fold="h"][data-land="true"]) {
+  clip-path: polygon(-40px -40px, calc(50% - 15px) -40px, calc(50% - 12px) 9px, calc(50% + 12px) 9px, calc(50% + 15px) -40px, calc(100% + 40px) -40px, calc(100% + 40px) calc(100% + 40px), calc(50% + 15px) calc(100% + 40px), calc(50% + 12px) calc(100% - 9px), calc(50% - 12px) calc(100% - 9px), calc(50% - 15px) calc(100% + 40px), -40px calc(100% + 40px));
+}
+/* hinge blocks sitting in the notch (over the bezel only) */
+.framed .device:is([data-fold="h"], [data-fold="v"]) .hg { display: block; z-index: 1; border-radius: 0; }
+.framed .device:is([data-fold="h"]:not([data-land="true"]), [data-fold="v"][data-land="true"]) .hg {
+  left: 0; right: 0; top: 50%; height: 30px; width: auto; margin: -15px 0 0 0;
+  background:
+    linear-gradient(90deg, #1a201f 0, #0c0f0f 9px, #070909 22px, rgba(0,0,0,0) 24px, rgba(0,0,0,0) calc(100% - 24px), #070909 calc(100% - 22px), #0c0f0f calc(100% - 9px), #1a201f 100%);
+  -webkit-mask: linear-gradient(180deg, transparent 0, #000 3px, #000 calc(100% - 3px), transparent 100%); mask: linear-gradient(180deg, transparent 0, #000 3px, #000 calc(100% - 3px), transparent 100%);
+}
+.framed .device:is([data-fold="v"]:not([data-land="true"]), [data-fold="h"][data-land="true"]) .hg {
+  top: 0; bottom: 0; left: 50%; width: 30px; height: auto; margin: 0 0 0 -15px;
+  background:
+    linear-gradient(180deg, #1a201f 0, #0c0f0f 9px, #070909 22px, rgba(0,0,0,0) 24px, rgba(0,0,0,0) calc(100% - 24px), #070909 calc(100% - 22px), #0c0f0f calc(100% - 9px), #1a201f 100%);
+  -webkit-mask: linear-gradient(90deg, transparent 0, #000 3px, #000 calc(100% - 3px), transparent 100%); mask: linear-gradient(90deg, transparent 0, #000 3px, #000 calc(100% - 3px), transparent 100%);
+}
+/* punch-hole lens: larger, with a glass ring */
+.framed .device:is([data-fold="h"], [data-fold="v"]) .cut { top: 16px; width: 17px; height: 17px; margin-left: -8.5px;
+  background: radial-gradient(circle at 40% 38%, #4a5a86 0 8%, #141b33 24%, #05060c 54%, #000 64%); box-shadow: 0 0 0 2.5px #090b0b, 0 0 0 3.5px rgba(255,255,255,.07); }
