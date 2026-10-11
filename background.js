@@ -22,7 +22,7 @@ const DEFAULT_ZOOM = '50';
 /* Navigation types that mean "the user wants to leave the simulator". */
 const LEAVE_TYPES = new Set(['typed', 'generated', 'keyword', 'keyword_generated', 'reload', 'forward_back']);
 
-const isWeb = (url) => /^https?:\/\//i.test(url || '');
+const isWeb = (url) => /^(https?:\/\/|file:\/\/\/)/i.test(url || ''); // http(s) pages and local files
 const isSim = (url) => !!url && url.indexOf(SIM_URL) === 0;
 const simTarget = (url) => SIM_URL + (url ? `?url=${encodeURIComponent(url)}` : '');
 

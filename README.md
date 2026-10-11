@@ -20,6 +20,13 @@ The extension is not on the Chrome Web Store yet, so you load it as an unpacked 
 
 Chrome 111 or newer is required.
 
+### Previewing local files (`file:///`)
+
+To simulate a page from your disk, such as `file:///Z:/GAME%20DLL/REPOS/Files-main/index.html`:
+
+1. Open `chrome://extensions`, click **Details** on this extension and turn on **Allow access to file URLs**. Chrome does not allow this to be granted automatically.
+2. Open the local file in a tab and click the toolbar icon, or paste a `file:///` URL or a plain path such as `Z:\GAME DLL\REPOS\Files-main\index.html` into the simulator's address bar.
+
 ## How to use it
 
 - **Open:** click the toolbar icon on any website, or press `Alt+Shift+M`. The simulator opens in the same tab with the default devices at 50% zoom.

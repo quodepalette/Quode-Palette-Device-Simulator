@@ -418,7 +418,7 @@
     const target = (a.getAttribute('target') || '').toLowerCase();
     if (target && !/^_(self|top|parent)$/.test(target)) return true; // _blank, named windows
     const href = (a.getAttribute('href') || '').trim();
-    return /^[a-z][a-z0-9+.-]*:/i.test(href) && !/^https?:/i.test(href); // mailto:, tel:, whatsapp:, ...
+    return /^[a-z][a-z0-9+.-]*:/i.test(href) && !/^(https?|file):/i.test(href); // mailto:, tel:, whatsapp:, ...
   };
 
   const replayClick = (d) => {
